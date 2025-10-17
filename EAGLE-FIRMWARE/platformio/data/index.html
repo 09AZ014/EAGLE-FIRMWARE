@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EAGLE UI</title>
+    <style>body{font-family:Arial, sans-serif;padding:16px}</style>
+  </head>
+  <body>
+    <h3>EAGLE Mini UI</h3>
+    <div id="status">Loading...</div>
+    <script>
+      const api = (path)=> fetch((location.port?`//${location.host}`:``)+path);
+      api('/api/status').then(r=>r.json()).then(j=>{
+        document.getElementById('status').textContent = 'Board: '+j.board+' IP: '+j.ip;
+      }).catch(()=>{document.getElementById('status').textContent='Offline';});
+    </script>
+  </body>
+</html>
+
+
