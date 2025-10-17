@@ -12,6 +12,7 @@
 #include "modules/imu_module.h"
 #include "modules/mic_module.h"
 #include "modules/buzzer_module.h"
+#include "modules/self_test_module.h"
 
 static ModuleManager moduleManager;
 static StorageModule storage;
@@ -23,6 +24,7 @@ static DisplayModule display;
 static ImuModule imu;
 static MicModule mic;
 static BuzzerModule buzzer;
+static SelfTestModule selfTest(buzzer);
 
 void setup() {
 	Serial.begin(115200);
@@ -39,6 +41,7 @@ void setup() {
 	moduleManager.registerModule(&imu);
 	moduleManager.registerModule(&mic);
 	moduleManager.registerModule(&buzzer);
+	moduleManager.registerModule(&selfTest);
 	moduleManager.setupAll();
 }
 

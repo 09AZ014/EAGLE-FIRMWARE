@@ -3,6 +3,7 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <WebServer.h>
+#include <LittleFS.h>
 #include "core/module_manager.h"
 #include "modules/storage_module.h"
 
@@ -47,6 +48,13 @@ private:
 			String html = "<html><body><h3>EAGLE WiFi Manager</h3><form method='POST' action='/save'>SSID:<input name=ssid><br>PASS:<input name=pass><br>TOKEN:<input name=token><br><button>Save</button></form></body></html>";
 			server.send(200, "text/html", html);
 		});
+		// Serve Mini UI under /ui and /ui/index.html from LittleFS
+		server.on("/ui", [this]() {
+			serveFile("/index.html", "text/html");
+		});
+		server.on("/ui/index.html", [this]() {
+			serveFile("/index.html", "text/html");
+		});
 		server.on("/save", HTTP_POST, [this]() {
 			String ssid = server.arg("ssid");
 			String pass = server.arg("pass");
@@ -57,6 +65,16 @@ private:
 			ESP.restart();
 		});
 		server.begin();
+	}
+
+	void serveFile(const char* path, const char* contentType) {
+		if (!LittleFS.exists(path)) {
+			server.send(404, "text/plain", "Not Found");
+			return;
+		}
+		File f = LittleFS.open(path, "r");
+		server.streamFile(f, contentType);
+		f.close();
 	}
 
 	StorageModule& storage;
