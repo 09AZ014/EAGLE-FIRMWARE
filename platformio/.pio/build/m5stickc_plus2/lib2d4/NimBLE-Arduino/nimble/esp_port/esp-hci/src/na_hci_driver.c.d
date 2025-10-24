@@ -1,0 +1,8 @@
+.pio/build/m5stickc_plus2/lib2d4/NimBLE-Arduino/nimble/esp_port/esp-hci/src/na_hci_driver.c.o: \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/esp_port/esp-hci/src/na_hci_driver.c \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/syscfg/syscfg.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/porting/nimble/include/syscfg/syscfg.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/esp_port/port/include/esp_nimble_cfg.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimconfig.h \
+ C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/dio_qspi/include/sdkconfig.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimconfig_rename.h

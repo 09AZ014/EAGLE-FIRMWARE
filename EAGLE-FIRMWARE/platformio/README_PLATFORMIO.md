@@ -1,56 +1,56 @@
-# EAGLE-FIRMWARE – Compilação e Upload com PlatformIO
+# EAGLE-FIRMWARE – Build and Upload with PlatformIO
 
-## Ambientes Suportados
-- **esp32dev** (ESP32 normal)
+## Supported Environments
+- **esp32dev** (Standard ESP32)
 - **m5stickc_plus2** (M5 Stick C Plus 2)
 
 ---
 
-## Pré‑requisitos
-- **Python 3.x** instalado
-- **PlatformIO CLI** (instale com `pip install platformio` ou `pipx install platformio`)
-- **Drivers USB/Serial** para sua placa (ex: CP210x, CH340 etc.)
-- Cabo USB de dados (não apenas carregamento)
+## Prerequisites
+- **Python 3.x** installed
+- **PlatformIO CLI** (install via `pip install platformio` or `pipx install platformio`)
+- **USB/Serial Drivers** for your board (e.g., CP210x, CH340, etc.)
+- Data USB cable (not just charging)
 
 ---
 
-## Compilação do Firmware
-1. **Entre na pasta do PlatformIO**:
+## Firmware Compilation
+1. **Enter the PlatformIO folder:**
    ```bash
    cd EAGLE-FIRMWARE/platformio
    ```
-2. **Compile para ESP32 normal:**
+2. **Compile for standard ESP32:**
    ```bash
    python -m platformio run -e esp32dev
    ```
-3. **Compile para M5 Stick C Plus 2:**
+3. **Compile for M5 Stick C Plus 2:**
    ```bash
    python -m platformio run -e m5stickc_plus2
    ```
 ---
 
-## Upload do Firmware (Gravação / Flash)
-### 1. Certifique-se de que a placa está conectada corretamente via USB.
-### 2. Descubra sua porta serial (em Windows, costuma ser COM3, COM4 etc.; no Linux/Mac, /dev/ttyUSB0 ou /dev/ttyACM0).
+## Firmware Upload (Flashing)
+### 1. Make sure your board is properly connected via USB.
+### 2. Find your serial port (on Windows, it’s usually COM3, COM4, etc.; on Linux/Mac, /dev/ttyUSB0 or /dev/ttyACM0).
 
-#### ESP32 normal:
+#### Standard ESP32:
 ```bash
 python -m platformio run -t upload -e esp32dev
-# ou especificando a porta:
+# or specify the port:
 python -m platformio run -t upload -e esp32dev --upload-port COM4
 ```
 
 #### M5 Stick C Plus 2:
 ```bash
 python -m platformio run -t upload -e m5stickc_plus2
-# ou especificando a porta:
+# or specify the port:
 python -m platformio run -t upload -e m5stickc_plus2 --upload-port COM4
 ```
 
 ---
 
-## Upload do Sistema de Ficheiros (LittleFS ou SPIFFS)
-Se seu firmware usa arquivos web ou configurações salvos em LittleFS:
+## Filesystem Upload (LittleFS or SPIFFS)
+If your firmware uses web files or saved settings in LittleFS, run:
 ```bash
 python -m platformio run -t uploadfs -e esp32dev
 python -m platformio run -t uploadfs -e m5stickc_plus2
@@ -58,38 +58,38 @@ python -m platformio run -t uploadfs -e m5stickc_plus2
 
 ---
 
-## Monitor Serial
-Para acompanhar logs, mensagens ou interagir com o firmware:
+## Serial Monitor
+For logs, messages, or interacting with the firmware:
 ```bash
 python -m platformio device monitor -e esp32dev
-# ou
+# or
 python -m platformio device monitor --port COM4 --baud 115200
 ```
-> Dica: use sempre a mesma velocidade definida em `platformio.ini` (normalmente 115200).
+> Tip: always use the same baud rate as set in `platformio.ini` (usually 115200).
 
 ---
 
-## Resolvendo Possíveis Erros
-- **Permissões na porta (Linux/Mac):**
-  - Adicione seu usuário ao grupo `dialout` e reinicie o sistema, se necessário.
-- **Problemas de driver:**
-  - Use o Gerenciador de Dispositivos (Windows) ou `dmesg | grep tty` (Linux) para verificar se a placa foi reconhecida.
-- **Permissão negada:**
-  - Execute o terminal com permissões de administrador (Windows) ou use `sudo` (Linux – mas evite sempre que possível).
-- **Erro PATH após instalar PlatformIO:**
-  - Tente sempre rodar via `python -m platformio ...`, pois isso garante o uso dos scripts no local correto.
+## Troubleshooting
+- **Port permissions (Linux/Mac):**
+  - Add your user to the `dialout` group and restart if needed.
+- **Driver problems:**
+  - Use Device Manager (Windows) or `dmesg | grep tty` (Linux) to check if the board was recognized.
+- **Permission denied:**
+  - Run the terminal as administrator (Windows) or use `sudo` (Linux – but avoid it if possible).
+- **PATH error after installing PlatformIO:**
+  - Always try running using `python -m platformio ...` to guarantee the correct local scripts are used.
 
 ---
 
-## Estrutura do Projeto
-- `src/core/` – arquivos centrais (configuração, gerenciamento de módulos)
-- `src/modules/` – módulos principais (Wi-Fi, OTA, REST API, IMU, Display etc.)
-- `src/boards/` – configurações específicas por board
-- `data/` – arquivos para LittleFS (Mini Web UI)
-- `platformio.ini` – configuração de ambientes, dependências e flags
+## Project Structure
+- `src/core/` – core files (configuration, module management)
+- `src/modules/` – main modules (Wi-Fi, OTA, REST API, IMU, Display, etc.)
+- `src/boards/` – board-specific settings
+- `data/` – files for LittleFS (Mini Web UI)
+- `platformio.ini` – environment, dependency and flag configuration
 
 ---
 
-## Dúvidas?
-Abra um issue ou consulte o README principal.
+## Questions?
+Open an issue or check the main README.
 

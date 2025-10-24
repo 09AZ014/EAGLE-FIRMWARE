@@ -1,228 +1,117 @@
-#include <WiFi.h>
-#include <Wire.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
-#include <NimBLEDevice.h>
+#include <Arduino.h>
 
-// OLED
-#define OLED_WIDTH 128
-#define OLED_HEIGHT 64
-#define OLED_ADDR 0x3C
+#include "core/board_config.h"
+#include "core/module_manager.h"
+#include "modules/wifi_module.h"
+#include "modules/storage_module.h"
+#include "modules/wifi_manager_module.h"
+#include "modules/rest_api_module.h"
+#include "modules/ota_module.h"
+#include "modules/safe_mode_module.h"
+#include "modules/display_module.h"
+#include "modules/imu_module.h"
+#include "modules/mic_module.h"
+#include "modules/buzzer_module.h"
+#include "modules/self_test_module.h"
+// Enhanced pentesting modules (temporarily disabled for basic build)
+// #include "modules/port_scanner_module.h"
+// #include "modules/vulnerability_scanner_module.h"
+// #include "modules/pentest_web_interface_module.h"
+// Bruce-inspired modules (temporarily disabled for basic build)
+// #include "modules/wifi_advanced_module.h"
+// #include "modules/ble_advanced_module.h"
+// #include "modules/rf_advanced_module.h"
+// #include "modules/rfid_advanced_module.h"
+// #include "modules/ir_advanced_module.h"
+// #include "modules/fm_advanced_module.h"
+// #include "modules/nrf24_advanced_module.h"
+// #include "modules/script_interpreter_module.h"
+// #include "modules/espnow_module.h"
+// #include "modules/utility_modules.h"
 
-// Botões (ajuste conforme seu hardware)
-#define BTN_UP     32
-#define BTN_DOWN   33
-#define BTN_BACK   25
-#define BTN_OK     26
-
-Adafruit_SSD1306 display(OLED_WIDTH, OLED_HEIGHT, &Wire, -1);
-
-// Debounce simples por botão
-struct ButtonState {
-	uint8_t pin;
-	bool lastStableLow;
-	uint32_t lastChangeMs;
-};
-
-ButtonState btnUp   { BTN_UP,   false, 0 };
-ButtonState btnDown { BTN_DOWN, false, 0 };
-ButtonState btnBack { BTN_BACK, false, 0 };
-ButtonState btnOk   { BTN_OK,   false, 0 };
-
-bool buttonPressed(ButtonState &b, uint16_t debounceMs = 120) {
-	bool isLow = (digitalRead(b.pin) == LOW);
-	uint32_t now = millis();
-	if (isLow != b.lastStableLow && (now - b.lastChangeMs) > debounceMs) {
-		b.lastChangeMs = now;
-		b.lastStableLow = isLow;
-		return isLow; // transição para pressionado (LOW)
-	}
-	return false;
-}
-
-// Estados de UI
-enum AppScreen { SCREEN_MENU = 0, SCREEN_WIFI, SCREEN_BLE, SCREEN_CALC, SCREEN_SYS };
-AppScreen currentScreen = SCREEN_MENU;
-int menuIndex = 0;
-
-// WiFi
-uint32_t lastWifiScanMs = 0;
-int wifiScanCount = 0;
-
-// BLE
-uint32_t lastBleScanMs = 0;
-NimBLEScan *bleScan = nullptr;
-NimBLEScanResults bleResults;
-
-// Calculadora
-long calcA = 0;
-long calcB = 0;
-char calcOp = '+';
-bool calcEditingA = true;
-
-void drawTitle(const char *title) {
-	display.clearDisplay();
-	display.setTextSize(1);
-	display.setTextColor(SSD1306_WHITE);
-	display.setCursor(0, 0);
-	display.println(title);
-}
-
-void drawMenu() {
-	drawTitle("Menu");
-	const char* items[] = { "WiFi Scan", "BLE Scan", "Calculadora", "Sistema" };
-	const int itemCount = 4;
-	for (int i = 0; i < itemCount; i++) {
-		display.setCursor(0, 16 + i * 12);
-		display.print((i == menuIndex) ? "> " : "  ");
-		display.println(items[i]);
-	}
-	display.display();
-}
-
-void drawWifiScan() {
-	drawTitle("WiFi Scan (passivo)");
-	if (millis() - lastWifiScanMs > 3000) {
-		wifiScanCount = WiFi.scanNetworks(/*async=*/false, /*hidden=*/true);
-		lastWifiScanMs = millis();
-	}
-
-	int shown = min(wifiScanCount, 4);
-	for (int i = 0; i < shown; i++) {
-		display.setCursor(0, 16 + i * 12);
-		display.print(WiFi.SSID(i));
-		display.print(" ");
-		display.print(WiFi.RSSI(i));
-		display.print("dBm ");
-		#ifdef ESP32
-		display.print("ch");
-		display.print(WiFi.channel(i));
-		#endif
-	}
-	display.display();
-}
-
-void drawBleScan() {
-	drawTitle("BLE Scan (passivo)");
-	if (millis() - lastBleScanMs > 3000) {
-		if (!bleScan) bleScan = NimBLEDevice::getScan();
-		bleScan->setActiveScan(false);
-		bleResults = bleScan->start(3, false);
-		lastBleScanMs = millis();
-	}
-
-	int shown = min(bleResults.getCount(), 4);
-	for (int i = 0; i < shown; i++) {
-		NimBLEAdvertisedDevice d = bleResults.getDevice(i);
-		display.setCursor(0, 16 + i * 12);
-		display.print(d.getAddress().toString().c_str());
-		display.print(" ");
-		display.print((int)d.getRSSI());
-		display.print("dBm");
-	}
-	display.display();
-}
-
-void drawCalc() {
-	if (buttonPressed(btnUp))   { if (calcEditingA) calcA++; else calcB++; }
-	if (buttonPressed(btnDown)) { if (calcEditingA) calcA = max(0L, calcA - 1); else calcB = max(0L, calcB - 1); }
-	if (buttonPressed(btnOk))   { calcEditingA = !calcEditingA; }
-	if (buttonPressed(btnBack)) {
-		if      (calcOp == '+') calcOp = '-';
-		else if (calcOp == '-') calcOp = '*';
-		else if (calcOp == '*') calcOp = '/';
-		else                    calcOp = '+';
-	}
-
-	long res = 0;
-	switch (calcOp) {
-		case '+': res = calcA + calcB; break;
-		case '-': res = calcA - calcB; break;
-		case '*': res = calcA * calcB; break;
-		case '/': res = (calcB == 0 ? 0 : calcA / calcB); break;
-	}
-
-	drawTitle("Calculadora");
-	display.setCursor(0, 20);
-	display.print(calcEditingA ? "> " : "  ");
-	display.print(calcA);
-	display.print(" ");
-	display.print(calcOp);
-	display.print(" ");
-	display.print(!calcEditingA ? "< " : "  ");
-	display.println(calcB);
-
-	display.setCursor(0, 40);
-	display.print("= ");
-	display.println(res);
-	display.display();
-}
-
-void drawSys() {
-	drawTitle("Sistema");
-	display.setCursor(0, 16);
-	display.print("Uptime: ");
-	display.print(millis() / 1000);
-	display.println("s");
-
-	display.setCursor(0, 28);
-	display.print("Heap: ");
-	display.print(ESP.getFreeHeap());
-	display.println(" B");
-
-	IPAddress ip = WiFi.localIP();
-	display.setCursor(0, 40);
-	display.print("IP: ");
-	if (ip[0] == 0) display.println("N/A"); else display.println(ip);
-
-	display.display();
-}
-
-void setupButtons() {
-	pinMode(BTN_UP,   INPUT_PULLUP);
-	pinMode(BTN_DOWN, INPUT_PULLUP);
-	pinMode(BTN_BACK, INPUT_PULLUP);
-	pinMode(BTN_OK,   INPUT_PULLUP);
-}
+static ModuleManager moduleManager;
+static StorageModule storage;
+static SafeModeModule safeMode;
+static WifiManagerModule wifiManager(storage);
+static RestApiModule restApi(storage);
+static OtaModule ota(storage);
+static DisplayModule display;
+static ImuModule imu;
+static MicModule mic;
+static BuzzerModule buzzer;
+static SelfTestModule selfTest(buzzer);
+// Enhanced pentesting modules (temporarily disabled)
+// static PortScannerModule portScanner;
+// static VulnerabilityScannerModule vulnScanner;
+// static PentestWebInterfaceModule pentestWebInterface;
+// Bruce-inspired modules (temporarily disabled)
+// static WiFiAdvancedModule wifiAdvanced;
+// static BLEAdvancedModule bleAdvanced;
+// static RFAdvancedModule rfAdvanced;
+// static RFIDAdvancedModule rfidAdvanced;
+// static IRAdvancedModule irAdvanced;
+// static FMAdvancedModule fmAdvanced;
+// static NRF24AdvancedModule nrf24Advanced;
+// static ScriptInterpreterModule scriptInterpreter;
+// static ESPNowModule espnow;
+// Utility modules (temporarily disabled)
+// static MicrophoneSpectrumModule micSpectrum;
+// static QRCodeModule qrCode;
+// static SDCardManagerModule sdManager;
+// static LittleFSManagerModule littlefsManager;
+// static RTCModule rtc;
+// static WebUIModule webUI;
+// static PIXModule pix;
 
 void setup() {
 	Serial.begin(115200);
-	Wire.begin();
+	delay(200);
+	Serial.println("EAGLE-FIRMWARE (PlatformIO) starting...");
+	Serial.printf("Board: %s\n", EAGLE_BOARD_NAME);
 
-	setupButtons();
-
-	if (!display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDR)) {
-		while (true) { delay(1000); }
-	}
-	display.clearDisplay();
-	display.setTextSize(1);
-	display.setTextColor(SSD1306_WHITE);
-	display.display();
-
-	WiFi.mode(WIFI_STA);
-	WiFi.disconnect(true, true);
-
-	NimBLEDevice::init("");
-	bleScan = NimBLEDevice::getScan();
+	moduleManager.registerModule(&safeMode);
+	moduleManager.registerModule(&storage);
+	moduleManager.registerModule(&wifiManager);
+	moduleManager.registerModule(&restApi);
+	moduleManager.registerModule(&ota);
+	moduleManager.registerModule(&display);
+	moduleManager.registerModule(&imu);
+	moduleManager.registerModule(&mic);
+	moduleManager.registerModule(&buzzer);
+	moduleManager.registerModule(&selfTest);
+	// Enhanced pentesting modules (temporarily disabled)
+	// moduleManager.registerModule(&portScanner);
+	// moduleManager.registerModule(&vulnScanner);
+	// moduleManager.registerModule(&pentestWebInterface);
+	// Bruce-inspired modules (temporarily disabled)
+	// moduleManager.registerModule(&wifiAdvanced);
+	// moduleManager.registerModule(&bleAdvanced);
+	// moduleManager.registerModule(&rfAdvanced);
+	// moduleManager.registerModule(&rfidAdvanced);
+	// moduleManager.registerModule(&irAdvanced);
+	// moduleManager.registerModule(&fmAdvanced);
+	// moduleManager.registerModule(&nrf24Advanced);
+	// moduleManager.registerModule(&scriptInterpreter);
+	// moduleManager.registerModule(&espnow);
+	// Utility modules (temporarily disabled)
+	// moduleManager.registerModule(&micSpectrum);
+	// moduleManager.registerModule(&qrCode);
+	// moduleManager.registerModule(&sdManager);
+	// moduleManager.registerModule(&littlefsManager);
+	// moduleManager.registerModule(&rtc);
+	// moduleManager.registerModule(&webUI);
+	// moduleManager.registerModule(&pix);
+	
+	// Configure module relationships (temporarily disabled)
+	// pentestWebInterface.setPortScanner(&portScanner);
+	// pentestWebInterface.setVulnScanner(&vulnScanner);
+	
+	moduleManager.setupAll();
 }
 
 void loop() {
-	if (currentScreen == SCREEN_MENU) {
-		if (buttonPressed(btnUp))   menuIndex = (menuIndex + 3) % 4;
-		if (buttonPressed(btnDown)) menuIndex = (menuIndex + 1) % 4;
-		if (buttonPressed(btnOk))   currentScreen = (AppScreen)(menuIndex + 1);
-		drawMenu();
-	} else {
-		if (buttonPressed(btnBack)) currentScreen = SCREEN_MENU;
-
-		switch (currentScreen) {
-			case SCREEN_WIFI: drawWifiScan(); break;
-			case SCREEN_BLE:  drawBleScan();  break;
-			case SCREEN_CALC: drawCalc();     break;
-			case SCREEN_SYS:  drawSys();      break;
-			default: break;
-		}
-	}
-
+	moduleManager.loopAll();
 	delay(50);
 }
+
+
