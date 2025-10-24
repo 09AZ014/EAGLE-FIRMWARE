@@ -28,7 +28,7 @@ Libraries (handled by PlatformIO): Adafruit GFX, Adafruit SSD1306, NimBLE-Arduin
 3. Open `arduino-ide/EAGLE-FIRMWARE/EAGLE-FIRMWARE.ino`, select ESP32 Dev Module, upload
 
 ## Ethics and Scope
-This repository is strictly for ethical and educational use. Offensive features (attacks, deauth, spam, BadUSB) are not implemented. Do not use the firmware for illegal activities.
+This repository is strictly for ethical and educational use, do not use the firmware for illegal activities.
 
 ## License
 MIT License (see LICENSE)
