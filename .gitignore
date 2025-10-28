@@ -6,6 +6,12 @@ Bruce-main/
 .vscode/
 *.pyc
 
+# Build artifacts
+*.o
+*.a
+*.elf
+EAGLE-FIRMWARE/platformio/.pio/build/
+
 # Build files
 *.bin
 *.elf
