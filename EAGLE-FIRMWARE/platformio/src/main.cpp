@@ -9,11 +9,12 @@
 #include "modules/rest_api_module.h"
 #include "modules/ota_module.h"
 #include "modules/safe_mode_module.h"
-#include "modules/display_module.h"
+// #include "modules/display_module.h"  // Substituído por menu_module
 #include "modules/imu_module.h"
 #include "modules/mic_module.h"
 #include "modules/buzzer_module.h"
 #include "modules/self_test_module.h"
+#include "modules/menu_module.h"
 // EAGLE Pentesting Modules - ACTIVE
 #include "modules/wifi_attacks_module.h"
 #include "modules/ble_attacks_module.h"
@@ -41,11 +42,12 @@ static StorageModule storage;
 static SafeModeModule safeMode;
 static WifiManagerModule wifiManager(storage);
 static OtaModule ota(storage);
-static DisplayModule display;
+// static DisplayModule display;  // Substituído por menu
 static ImuModule imu;
 static MicModule mic;
 static BuzzerModule buzzer;
 static SelfTestModule selfTest(buzzer);
+static MenuModule menu;
 // EAGLE Pentesting Modules (declare before RestAPI)
 WiFiAttacksModule wifiAttacks;
 BLEAttacksModule bleAttacks;
@@ -109,8 +111,8 @@ void setup() {
 	delay(50);
 	Serial.println("[OK] Core modules registered");
 	Serial.println("[3/10] Registering hardware modules...");
-	moduleManager.registerModule(&display);
-	delay(100);
+	// Display substituído por menu interativo
+	// moduleManager.registerModule(&display);
 	// IMU disabled (not critical)
 	// moduleManager.registerModule(&imu);
 	moduleManager.registerModule(&mic);
@@ -133,6 +135,16 @@ void setup() {
 	moduleManager.registerModule(&attacksApi);
 	delay(50);
 	Serial.println("[OK] Attack modules registered");
+	
+	// Menu interativo (último para ter acesso a todos os módulos)
+	Serial.println("[5/10] Registering interactive menu...");
+	menu.setWiFiAttacks(&wifiAttacks);
+	menu.setBLEAttacks(&bleAttacks);
+	menu.setIRModule(&irModule);
+	menu.setEvilPortal(&evilPortal);
+	moduleManager.registerModule(&menu);
+	delay(50);
+	Serial.println("[OK] Interactive menu registered");
 	// Enhanced pentesting modules (temporarily disabled)
 	// moduleManager.registerModule(&portScanner);
 	// moduleManager.registerModule(&vulnScanner);
@@ -160,7 +172,7 @@ void setup() {
 	// pentestWebInterface.setPortScanner(&portScanner);
 	// pentestWebInterface.setVulnScanner(&vulnScanner);
 	
-	Serial.println("[5/10] Initializing all modules...");
+	Serial.println("[6/10] Initializing all modules...");
 	Serial.println("This may take a moment...");
 	moduleManager.setupAll();
 	Serial.println("[OK] All modules initialized");

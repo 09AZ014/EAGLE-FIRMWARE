@@ -213,7 +213,7 @@
  C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/libraries/Update/src/Update.h \
  C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/cores/esp32/MD5Builder.h \
  C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/esp_rom/include/esp_rom_md5.h \
- src/modules/safe_mode_module.h src/modules/display_module.h \
+ src/modules/safe_mode_module.h src/modules/imu_module.h \
  .pio/libdeps/m5stickc_plus2/M5Unified/src/M5Unified.h \
  .pio/libdeps/m5stickc_plus2/M5Unified/src/M5Unified.hpp \
  .pio/libdeps/m5stickc_plus2/M5Unified/src/utility/m5unified_common.h \
@@ -319,8 +319,8 @@
  .pio/libdeps/m5stickc_plus2/M5Unified/src/utility/imu/IMU_Base.hpp \
  .pio/libdeps/m5stickc_plus2/M5Unified/src/utility/imu/../I2C_Class.hpp \
  .pio/libdeps/m5stickc_plus2/M5Unified/src/utility/IOExpander_Base.hpp \
- src/modules/imu_module.h src/modules/mic_module.h \
- src/modules/buzzer_module.h src/modules/self_test_module.h \
+ src/modules/mic_module.h src/modules/buzzer_module.h \
+ src/modules/self_test_module.h src/modules/menu_module.h \
  src/modules/wifi_attacks_module.h \
  C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/esp_wifi/include/esp_wifi.h \
  C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/esp_wifi/include/esp_wifi_types.h \
