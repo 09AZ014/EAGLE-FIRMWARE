@@ -2,7 +2,7 @@
 
 #include <Arduino.h>
 #ifdef BOARD_M5STICKC_PLUS2
-#include <M5StickCPlus2.h>
+#include <M5Unified.h>
 #endif
 #include "core/module_manager.h"
 

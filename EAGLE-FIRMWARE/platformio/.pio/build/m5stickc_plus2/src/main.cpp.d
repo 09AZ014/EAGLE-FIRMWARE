@@ -214,7 +214,6 @@
  C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/cores/esp32/MD5Builder.h \
  C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/esp_rom/include/esp_rom_md5.h \
  src/modules/safe_mode_module.h src/modules/display_module.h \
- .pio/libdeps/m5stickc_plus2/M5StickCPlus2/src/M5StickCPlus2.h \
  .pio/libdeps/m5stickc_plus2/M5Unified/src/M5Unified.h \
  .pio/libdeps/m5stickc_plus2/M5Unified/src/M5Unified.hpp \
  .pio/libdeps/m5stickc_plus2/M5Unified/src/utility/m5unified_common.h \

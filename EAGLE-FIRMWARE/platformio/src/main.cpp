@@ -109,8 +109,9 @@ void setup() {
 	delay(50);
 	Serial.println("[OK] Core modules registered");
 	Serial.println("[3/10] Registering hardware modules...");
-	// Display and IMU temporarily disabled (causing watchdog reset)
-	// moduleManager.registerModule(&display);
+	moduleManager.registerModule(&display);
+	delay(100);
+	// IMU disabled (not critical)
 	// moduleManager.registerModule(&imu);
 	moduleManager.registerModule(&mic);
 	delay(50);
@@ -118,7 +119,7 @@ void setup() {
 	delay(50);
 	moduleManager.registerModule(&selfTest);
 	delay(50);
-	Serial.println("[OK] Hardware modules registered (display/IMU disabled)");
+	Serial.println("[OK] Hardware modules registered");
 	// EAGLE Pentesting Modules
 	Serial.println("[4/10] Registering attack modules...");
 	moduleManager.registerModule(&wifiAttacks);
