@@ -1,21 +1,70 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>EAGLE UI</title>
-    <style>body{font-family:Arial, sans-serif;padding:16px}</style>
-  </head>
-  <body>
-    <h3>EAGLE Mini UI</h3>
-    <div id="status">Loading...</div>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EAGLE Firmware - Pentesting Platform</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { background: rgba(255, 255, 255, 0.95); padding: 30px; border-radius: 15px; text-align: center; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .header h1 { color: #667eea; font-size: 2.5em; margin-bottom: 10px; }
+        .header p { color: #666; font-size: 1.1em; }
+        .status { background: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .status-item { background: #f8f9fa; padding: 15px; border-radius: 10px; text-align: center; }
+        .status-label { color: #666; font-size: 0.9em; margin-bottom: 5px; }
+        .status-value { color: #333; font-size: 1.3em; font-weight: bold; }
+        .sections { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; }
+        .section { background: rgba(255, 255, 255, 0.95); padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .section h2 { color: #667eea; margin-bottom: 20px; font-size: 1.5em; border-bottom: 2px solid #667eea; padding-bottom: 10px; }
+        .btn { width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 10px; font-size: 1em; cursor: pointer; transition: all 0.3s; font-weight: bold; text-transform: uppercase; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-danger { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }
+        .btn-success { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; }
+        .btn-warning { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; }
+        .log { background: #1e1e1e; color: #00ff00; padding: 15px; border-radius: 10px; font-family: 'Courier New', monospace; height: 200px; overflow-y: auto; margin-top: 20px; }
+        .attack-active { background: #ff4444; color: white; padding: 10px; border-radius: 5px; text-align: center; margin: 10px 0; font-weight: bold; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header"><h1>🦅 EAGLE FIRMWARE</h1><p>Advanced ESP32 Pentesting Platform</p></div>
+        <div class="status"><div class="status-grid"><div class="status-item"><div class="status-label">Device</div><div class="status-value" id="device">ESP32</div></div><div class="status-item"><div class="status-label">Uptime</div><div class="status-value" id="uptime">0s</div></div><div class="status-item"><div class="status-label">Free RAM</div><div class="status-value" id="ram">0 KB</div></div><div class="status-item"><div class="status-label">IP Address</div><div class="status-value" id="ip">-</div></div></div></div>
+        <div id="attack-status" class="attack-active" style="display:none;">⚠️ ATTACK IN PROGRESS</div>
+        <div class="sections">
+            <div class="section"><h2>📡 WiFi Attacks</h2><button class="btn btn-primary" onclick="wifiScan()">Scan Networks</button><button class="btn btn-danger" onclick="startBeaconSpam()">Beacon Spam</button><button class="btn btn-danger" onclick="startDeauthFlood()">Deauth Flood</button><button class="btn btn-warning" onclick="startEvilPortal()">Evil Portal</button><button class="btn btn-success" onclick="stopAttack()">Stop Attack</button></div>
+            <div class="section"><h2>🔵 BLE Attacks</h2><button class="btn btn-primary" onclick="bleScan()">BLE Scan</button><button class="btn btn-danger" onclick="bleSpam('all')">Spam All</button><button class="btn btn-warning" onclick="bleSpam('ios')">iOS Spam</button><button class="btn btn-warning" onclick="bleSpam('android')">Android Spam</button><button class="btn btn-warning" onclick="bleSpam('samsung')">Samsung Spam</button><button class="btn btn-warning" onclick="bleSpam('windows')">Windows Spam</button><button class="btn btn-success" onclick="stopAttack()">Stop Spam</button></div>
+            <div class="section"><h2>📻 RF & RFID</h2><button class="btn btn-primary" onclick="rfScan()">RF Scan</button><button class="btn btn-danger" onclick="rfJammer()">RF Jammer</button><button class="btn btn-primary" onclick="rfidRead()">RFID Read</button><button class="btn btn-warning" onclick="rfidClone()">RFID Clone</button><p style="margin-top:10px;color:#666;font-size:0.9em;">Requires CC1101 (RF) or PN532 (RFID) module</p></div>
+            <div class="section"><h2>🔧 Other Tools</h2><button class="btn btn-primary" onclick="irTvbGone()">TV-B-Gone</button><button class="btn btn-warning" onclick="fileManager()">File Manager</button><button class="btn btn-success" onclick="systemInfo()">System Info</button></div>
+        </div>
+        <div class="status"><h2 style="color:#667eea;margin-bottom:15px;">📋 Activity Log</h2><div class="log" id="log"><div>[INFO] EAGLE Firmware WebUI loaded</div></div></div>
+    </div>
     <script>
-      const api = (path)=> fetch((location.port?`//${location.host}`:``)+path);
-      api('/api/status').then(r=>r.json()).then(j=>{
-        document.getElementById('status').textContent = 'Board: '+j.board+' IP: '+j.ip;
-      }).catch(()=>{document.getElementById('status').textContent='Offline';});
+        let attackActive = false;
+        function log(m){const d=new Date().toLocaleTimeString(),e=document.createElement('div');e.textContent=`[${d}] ${m}`;document.getElementById('log').appendChild(e);document.getElementById('log').scrollTop=999999;}
+        function setAttackStatus(a){attackActive=a;document.getElementById('attack-status').style.display=a?'block':'none';}
+        async function sendCommand(e,d={}){try{const r=await fetch(`/api/${e}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)}),j=await r.json();log(`${e}: ${j.message||'Success'}`);}catch(err){log(`ERROR: ${err.message}`);}}
+        function wifiScan(){log('Starting WiFi scan...');sendCommand('wifi/scan');}
+        function startBeaconSpam(){log('Starting Beacon Spam...');setAttackStatus(true);sendCommand('wifi/beacon-spam',{ssids:['FreeWiFi','TestNet']});}
+        function startDeauthFlood(){if(confirm('⚠️ Deauth flood will disconnect ALL nearby devices. Continue?')){log('Starting Deauth Flood...');setAttackStatus(true);sendCommand('wifi/deauth-flood');}}
+        function startEvilPortal(){const s=prompt('Enter SSID:','Free WiFi');if(s){log(`Starting Evil Portal: ${s}`);setAttackStatus(true);sendCommand('wifi/evil-portal',{ssid:s});}}
+        function bleScan(){log('Starting BLE scan...');sendCommand('ble/scan',{duration:10});}
+        function bleSpam(t){log(`Starting BLE spam: ${t}`);setAttackStatus(true);sendCommand('ble/spam',{type:t});}
+        function rfScan(){log('Starting RF scan...');sendCommand('rf/scan');}
+        function rfJammer(){if(confirm('⚠️ RF Jammer will interfere with radio. Continue?')){log('Starting RF jammer...');setAttackStatus(true);sendCommand('rf/jammer');}}
+        function rfidRead(){log('Reading RFID...');sendCommand('rfid/read');}
+        function rfidClone(){log('Cloning RFID...');sendCommand('rfid/clone');}
+        function irTvbGone(){log('Starting TV-B-Gone...');sendCommand('ir/tvbgone');}
+        function fileManager(){log('Opening file manager...');window.location.href='/files';}
+        function systemInfo(){log('Fetching system info...');sendCommand('system/info');}
+        function stopAttack(){log('Stopping attack...');setAttackStatus(false);sendCommand('system/stop');}
+        setInterval(async()=>{try{const r=await fetch('/api/status'),d=await r.json();document.getElementById('uptime').textContent=d.uptime||'0s';document.getElementById('ram').textContent=d.freeRam||'0 KB';document.getElementById('ip').textContent=d.ip||'-';}catch(e){}},2000);
     </script>
-  </body>
+</body>
 </html>
 
 
