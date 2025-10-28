@@ -1,0 +1,21 @@
+# Ignore Bruce reference firmware (local copy only)
+Bruce-main/
+
+# PlatformIO
+.pio/
+.vscode/
+*.pyc
+
+# Build files
+*.bin
+*.elf
+*.map
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+*.swp
+*.swo
+*~

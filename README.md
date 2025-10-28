@@ -9,49 +9,49 @@ Dual setup repository for ESP32 firmware:
 ## 🎯 Features (Offensive Security Tools)
 
 ### 📡 WiFi Attacks
-- **Beacon Spam**: Flood area with fake WiFi access points
-- **Deauth Attack**: Disconnect specific clients from WiFi networks
-- **Deauth Flood**: Mass deauthentication attack on all nearby networks
-- **Evil Portal**: Captive portal for credential harvesting
-- **WiFi Scan**: Advanced network reconnaissance
-- **Raw Sniffer**: Capture WiFi packets
-- **Wardriving**: GPS-enabled WiFi mapping (with GPS module)
+- ✅ **Beacon Spam**: Flood area with fake WiFi access points (IMPLEMENTED)
+- ✅ **Deauth Attack**: Disconnect specific clients from WiFi networks (IMPLEMENTED)
+- ✅ **Deauth Flood**: Mass deauthentication attack on all nearby networks (IMPLEMENTED)
+- ✅ **Evil Portal**: Captive portal for credential harvesting (IMPLEMENTED)
+- ✅ **WiFi Scan**: Advanced network reconnaissance (IMPLEMENTED)
+- ⏸️ **Raw Sniffer**: Capture WiFi packets (Coming soon)
+- ⏸️ **Wardriving**: GPS-enabled WiFi mapping (Requires GPS module - Coming soon)
 
 ### 🔵 BLE Attacks
-- **BLE Spam**: Flood nearby devices with fake BLE advertisements
-  - iOS Spam (Apple Juice): AirPods, Beats, and other Apple devices
-  - Android Spam (Fast Pair): Google Pixel Buds, JBL, Sony, Bose devices
-  - Samsung Spam: Galaxy Buds series
-  - Windows Spam (Swift Pair): Surface headphones and accessories
-- **BLE Scan**: Advanced Bluetooth Low Energy reconnaissance
-- **Bad BLE**: Bluetooth-based BadUSB attacks
-- **BLE Keyboard**: Use ESP32 as wireless HID keyboard (Cardputer/T-Deck)
+- ✅ **BLE Spam**: Flood nearby devices with fake BLE advertisements (IMPLEMENTED)
+  - ✅ iOS Spam (Apple Juice): AirPods, Beats, and other Apple devices
+  - ✅ Android Spam (Fast Pair): Google Pixel Buds, JBL, Sony, Bose devices
+  - ✅ Samsung Spam: Galaxy Buds series
+  - ✅ Windows Spam (Swift Pair): Surface headphones and accessories
+- ✅ **BLE Scan**: Advanced Bluetooth Low Energy reconnaissance (IMPLEMENTED)
+- ⏸️ **Bad BLE**: Bluetooth-based BadUSB attacks (Coming soon)
+- ⏸️ **BLE Keyboard**: Use ESP32 as wireless HID keyboard (Coming soon)
 
 ### 📻 RF Attacks (with CC1101 module)
-- **RF Scan/Copy/Replay**: Capture and replay Sub-GHz signals
-- **RF Jammer**: Jam RF frequencies (Full & Intermittent)
-- **RF Spectrum Analyzer**: Visualize RF spectrum
-- **Custom SubGhz**: Load and transmit custom RF payloads
+- ⏸️ **RF Scan/Copy/Replay**: Capture and replay Sub-GHz signals (Requires CC1101 - Coming soon)
+- ⏸️ **RF Jammer**: Jam RF frequencies (Requires CC1101 - Coming soon)
+- ⏸️ **RF Spectrum Analyzer**: Visualize RF spectrum (Requires CC1101 - Coming soon)
+- ⏸️ **Custom SubGhz**: Load and transmit custom RF payloads (Requires CC1101 - Coming soon)
 
 ### 💳 RFID/NFC Attacks (with PN532 module)
-- **Read/Clone**: Read and clone RFID/NFC tags (125kHz + 13.56MHz)
-- **Write**: Write data to RFID/NFC tags
-- **Emulate**: Emulate RFID/NFC tags
-- **NDEF**: Write NDEF records
-- **Amiibolink**: Nintendo Amiibo emulation
+- ⏸️ **Read/Clone**: Read and clone RFID/NFC tags (Requires PN532 - Coming soon)
+- ⏸️ **Write**: Write data to RFID/NFC tags (Requires PN532 - Coming soon)
+- ⏸️ **Emulate**: Emulate RFID/NFC tags (Requires PN532 - Coming soon)
+- ⏸️ **NDEF**: Write NDEF records (Requires PN532 - Coming soon)
+- ⏸️ **Amiibolink**: Nintendo Amiibo emulation (Requires PN532 - Coming soon)
 
 ### 📺 IR Attacks
-- **TV-B-Gone**: Universal TV remote control jammer
-- **IR Receiver/Transmitter**: Capture and replay IR signals
-- **Protocols**: NEC, SIRC, Samsung32, RC5, RC6 and more
+- ✅ **TV-B-Gone**: Universal TV remote control jammer (IMPLEMENTED - NEC protocol)
+- ⏸️ **IR Receiver/Transmitter**: Capture and replay IR signals (Coming soon)
+- ⏸️ **Protocols**: NEC (✅), SIRC, Samsung32, RC5, RC6 (Coming soon)
 
 ### 📶 Other Features
-- **BadUSB**: Run Ducky scripts via USB (Cardputer/T-Deck)
-- **JavaScript Interpreter**: Run custom scripts on-device
-- **ESP-NOW**: Device-to-device communication
-- **WebUI**: Full web interface for remote control
-- **File Manager**: SD Card & LittleFS management
-- **QR Codes**: Generate and display QR codes
+- ⏸️ **BadUSB**: Run Ducky scripts via USB (Coming soon - Requires USB capable board)
+- ⏸️ **JavaScript Interpreter**: Run custom scripts on-device (Coming soon)
+- ⏸️ **ESP-NOW**: Device-to-device communication (Coming soon)
+- ✅ **WebUI**: REST API interface for remote control (IMPLEMENTED)
+- ✅ **File Manager**: LittleFS management (IMPLEMENTED)
+- ⏸️ **QR Codes**: Generate and display QR codes (Coming soon)
 
 ## 🔧 Hardware (defaults)
 - ESP32 DevKit (standard), M5StickC Plus 2, or compatible boards
@@ -93,16 +93,31 @@ For detailed Arduino IDE instructions, see [arduino/README_ARDUINO.md](EAGLE-FIR
 ### Serial Commands
 Connect via Serial Monitor (115200 baud) and use commands to trigger attacks:
 ```
+# WiFi Attacks
 wifi_scan              - Scan WiFi networks
 wifi_deauth_flood      - Start deauth flood attack
 wifi_beacon_spam       - Start beacon spam attack
+
+# BLE Attacks
 ble_spam_all           - Spam all BLE device types
 ble_spam_ios           - Spam iOS devices (Apple Juice)
 ble_spam_android       - Spam Android devices (Fast Pair)
 ble_spam_samsung       - Spam Samsung devices
 ble_spam_windows       - Spam Windows devices (Swift Pair)
 ble_scan               - Scan BLE devices
-stop                   - Stop current attack
+
+# IR Attacks
+ir_tvbgone             - TV-B-Gone (power off TVs)
+
+# Evil Portal
+evil_portal            - Start captive portal
+portal_status          - Portal status
+portal_dump            - Dump captured credentials
+
+# Control
+stop                   - Stop all attacks
+status                 - System status
+help                   - Show all commands
 ```
 
 ### Web Interface

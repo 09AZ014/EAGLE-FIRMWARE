@@ -18,6 +18,8 @@
 #include "modules/wifi_attacks_module.h"
 #include "modules/ble_attacks_module.h"
 #include "modules/attacks_api_module.h"
+#include "modules/ir_module.h"
+#include "modules/evil_portal_module.h"
 // Enhanced pentesting modules (temporarily disabled for basic build)
 // #include "modules/port_scanner_module.h"
 // #include "modules/vulnerability_scanner_module.h"
@@ -47,6 +49,8 @@ static SelfTestModule selfTest(buzzer);
 // EAGLE Pentesting Modules (declare before RestAPI)
 static WiFiAttacksModule wifiAttacks;
 static BLEAttacksModule bleAttacks;
+static IRModule irModule;
+static EvilPortalModule evilPortal;
 // REST API needs access to attack modules
 static RestApiModule restApi(storage);
 static AttacksApiModule attacksApi;
@@ -99,6 +103,8 @@ void setup() {
 	// EAGLE Pentesting Modules
 	moduleManager.registerModule(&wifiAttacks);
 	moduleManager.registerModule(&bleAttacks);
+	moduleManager.registerModule(&irModule);
+	moduleManager.registerModule(&evilPortal);
 	moduleManager.registerModule(&attacksApi);
 	// Enhanced pentesting modules (temporarily disabled)
 	// moduleManager.registerModule(&portScanner);
@@ -137,6 +143,8 @@ void setup() {
 	Serial.println("========================================");
 	Serial.println("\n✅ WiFi Attacks: ACTIVE");
 	Serial.println("✅ BLE Attacks: ACTIVE");
+	Serial.println("✅ IR Attacks: ACTIVE");
+	Serial.println("✅ Evil Portal: ACTIVE");
 	Serial.println("✅ Web Interface: ACTIVE\n");
 	Serial.println("⚠️  USE ONLY ON YOUR OWN EQUIPMENT!");
 	Serial.println("⚠️  UNAUTHORIZED USE IS ILLEGAL!\n");
@@ -195,11 +203,35 @@ void loop() {
 			Serial.println("[BLE] Starting Windows Spam (Swift Pair)...");
 			bleAttacks.startSwiftPairAttack();
 		}
+		// IR Attacks
+		else if (cmd == "ir_tvbgone") {
+			Serial.println("[IR] Starting TV-B-Gone...");
+			irModule.tvbGone();
+		}
+		// Evil Portal
+		else if (cmd == "evil_portal") {
+			Serial.println("[Evil Portal] Starting captive portal...");
+			evilPortal.startPortal("Free WiFi", "Starbucks WiFi");
+		}
+		else if (cmd == "portal_status") {
+			Serial.printf("[Evil Portal] Active: %s\n", evilPortal.isPortalActive() ? "YES" : "NO");
+			Serial.printf("[Evil Portal] Credentials captured: %d\n", evilPortal.getCredentialCount());
+		}
+		else if (cmd == "portal_dump") {
+			auto creds = evilPortal.getCapturedCredentials();
+			Serial.printf("\n[Evil Portal] Dumping %d credentials:\n", creds.size());
+			for (size_t i = 0; i < creds.size(); i++) {
+				Serial.printf("  [%d] SSID: %s | Password: %s | IP: %s | Time: %s\n",
+							  i + 1, creds[i].ssid.c_str(), creds[i].password.c_str(),
+							  creds[i].clientIP.toString().c_str(), creds[i].timestamp.c_str());
+			}
+		}
 		// Control
 		else if (cmd == "stop") {
 			Serial.println("[EAGLE] Stopping all attacks...");
 			wifiAttacks.stopAttack();
 			bleAttacks.stopSpam();
+			evilPortal.stopPortal();
 		}
 		else if (cmd == "status") {
 			Serial.println("\n=== EAGLE-FIRMWARE Status ===");
@@ -208,6 +240,8 @@ void loop() {
 			Serial.printf("Uptime: %lu seconds\n", millis() / 1000);
 			Serial.printf("WiFi Attack Active: %s\n", wifiAttacks.isAttackActive() ? "YES" : "NO");
 			Serial.printf("BLE Spam Active: %s\n", bleAttacks.isSpamActive() ? "YES" : "NO");
+			Serial.printf("Evil Portal Active: %s\n", evilPortal.isPortalActive() ? "YES" : "NO");
+			Serial.printf("Credentials Captured: %d\n", evilPortal.getCredentialCount());
 			Serial.println("===========================\n");
 		}
 		else if (cmd == "help") {
@@ -223,6 +257,12 @@ void loop() {
 			Serial.println("  ble_spam_android       - Android spam (Fast Pair)");
 			Serial.println("  ble_spam_samsung       - Samsung spam");
 			Serial.println("  ble_spam_windows       - Windows spam (Swift Pair)");
+			Serial.println("\nIR Attacks:");
+			Serial.println("  ir_tvbgone             - TV-B-Gone (power off TVs)");
+			Serial.println("\nEvil Portal:");
+			Serial.println("  evil_portal            - Start captive portal");
+			Serial.println("  portal_status          - Portal status");
+			Serial.println("  portal_dump            - Dump captured credentials");
 			Serial.println("\nControl:");
 			Serial.println("  stop                   - Stop all attacks");
 			Serial.println("  status                 - System status");
