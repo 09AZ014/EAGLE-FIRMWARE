@@ -1,0 +1,24 @@
+# EAGLE-FIRMWARE Test Commands
+# Copy and paste these into Serial Monitor (115200 baud) one by one
+
+# Basic Commands
+help
+status
+
+# WiFi Attacks
+wifi_scan
+wifi_beacon_spam
+stop
+
+# BLE Attacks
+ble_scan
+ble_spam_ios
+stop
+
+# Evil Portal
+evil_portal
+portal_status
+stop
+
+# IR
+ir_tvbgone

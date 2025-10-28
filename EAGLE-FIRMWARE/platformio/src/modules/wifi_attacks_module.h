@@ -6,9 +6,6 @@
 #include <esp_wifi.h>
 #include <vector>
 
-// Override raw frame sanity check (required for deauth attacks)
-extern "C" int ieee80211_raw_frame_sanity_check(int32_t arg, int32_t arg2, int32_t arg3);
-
 class WiFiAttacksModule : public IModule {
 public:
     WiFiAttacksModule() {}

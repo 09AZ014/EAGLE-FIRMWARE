@@ -20,7 +20,7 @@ void IRModule::setup() {
     Serial.println("[IR] Module initialized");
 }
 
-void IRModule::sendIRCode(uint16_t code, uint8_t bits) {
+void IRModule::sendIRCode(uint32_t code, uint8_t bits) {
     // Simple NEC protocol implementation
     // 38kHz carrier frequency
     const int CARRIER_FREQ = 38000;

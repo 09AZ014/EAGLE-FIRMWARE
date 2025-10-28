@@ -11,21 +11,18 @@ public:
 	const char* getName() const override { return "imu"; }
 	void setup() override {
 #ifdef BOARD_M5STICKC_PLUS2
-		M5.Imu.begin();
+		Serial.println("[IMU] Initializing...");
+		if (M5.Imu.begin()) {
+			Serial.println("[IMU] OK");
+		} else {
+			Serial.println("[IMU] Failed (not critical)");
+		}
+#else
+		Serial.println("[IMU] Non-M5 board - IMU disabled");
 #endif
 	}
 	void loop() override {
-#ifdef BOARD_M5STICKC_PLUS2
-		float ax, ay, az, gx, gy, gz;
-		M5.Imu.getAccelData(&ax, &ay, &az);
-		M5.Imu.getGyroData(&gx, &gy, &gz);
-		// Simple periodic log
-		static unsigned long last = 0;
-		if (millis() - last > 500) {
-			last = millis();
-			Serial.printf("IMU A:%.2f,%.2f,%.2f G:%.2f,%.2f,%.2f\n", ax, ay, az, gx, gy, gz);
-		}
-#endif
+		// IMU loop disabled to reduce overhead
 	}
 };
 

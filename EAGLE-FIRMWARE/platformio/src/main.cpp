@@ -47,8 +47,8 @@ static MicModule mic;
 static BuzzerModule buzzer;
 static SelfTestModule selfTest(buzzer);
 // EAGLE Pentesting Modules (declare before RestAPI)
-static WiFiAttacksModule wifiAttacks;
-static BLEAttacksModule bleAttacks;
+WiFiAttacksModule wifiAttacks;
+BLEAttacksModule bleAttacks;
 static IRModule irModule;
 static EvilPortalModule evilPortal;
 // REST API needs access to attack modules
@@ -79,33 +79,59 @@ static AttacksApiModule attacksApi;
 
 void setup() {
 	Serial.begin(115200);
-	delay(200);
+	delay(500);
+	Serial.println("\n\n==================================");
 	Serial.println("EAGLE-FIRMWARE (PlatformIO) starting...");
 	Serial.printf("Board: %s\n", EAGLE_BOARD_NAME);
+	Serial.printf("Free Heap: %d bytes\n", ESP.getFreeHeap());
+	Serial.println("==================================");
+	delay(100);
 	
 	// Initialize LittleFS for web interface
+	Serial.println("[1/10] Initializing LittleFS...");
 	if (!LittleFS.begin(true)) {
 		Serial.println("[ERROR] LittleFS Mount Failed");
 	} else {
 		Serial.println("[OK] LittleFS mounted");
 	}
+	delay(100);
 
+	Serial.println("[2/10] Registering core modules...");
 	moduleManager.registerModule(&safeMode);
+	delay(50);
 	moduleManager.registerModule(&storage);
+	delay(50);
 	moduleManager.registerModule(&wifiManager);
+	delay(50);
 	moduleManager.registerModule(&restApi);
+	delay(50);
 	moduleManager.registerModule(&ota);
-	moduleManager.registerModule(&display);
-	moduleManager.registerModule(&imu);
+	delay(50);
+	Serial.println("[OK] Core modules registered");
+	Serial.println("[3/10] Registering hardware modules...");
+	// Display and IMU temporarily disabled (causing watchdog reset)
+	// moduleManager.registerModule(&display);
+	// moduleManager.registerModule(&imu);
 	moduleManager.registerModule(&mic);
+	delay(50);
 	moduleManager.registerModule(&buzzer);
+	delay(50);
 	moduleManager.registerModule(&selfTest);
+	delay(50);
+	Serial.println("[OK] Hardware modules registered (display/IMU disabled)");
 	// EAGLE Pentesting Modules
+	Serial.println("[4/10] Registering attack modules...");
 	moduleManager.registerModule(&wifiAttacks);
+	delay(50);
 	moduleManager.registerModule(&bleAttacks);
+	delay(50);
 	moduleManager.registerModule(&irModule);
+	delay(50);
 	moduleManager.registerModule(&evilPortal);
+	delay(50);
 	moduleManager.registerModule(&attacksApi);
+	delay(50);
+	Serial.println("[OK] Attack modules registered");
 	// Enhanced pentesting modules (temporarily disabled)
 	// moduleManager.registerModule(&portScanner);
 	// moduleManager.registerModule(&vulnScanner);
@@ -133,7 +159,10 @@ void setup() {
 	// pentestWebInterface.setPortScanner(&portScanner);
 	// pentestWebInterface.setVulnScanner(&vulnScanner);
 	
+	Serial.println("[5/10] Initializing all modules...");
+	Serial.println("This may take a moment...");
 	moduleManager.setupAll();
+	Serial.println("[OK] All modules initialized");
 	
 	// Welcome banner
 	Serial.println("\n\n");

@@ -15,14 +15,14 @@ public:
     
     // TV-B-Gone functionality
     void tvbGone();
-    void sendIRCode(uint16_t code, uint8_t bits);
+    void sendIRCode(uint32_t code, uint8_t bits);
     
 private:
     const int IR_LED_PIN = 4;  // Default IR LED pin
     
     // TV power codes (NEC protocol)
     struct IRCode {
-        uint16_t code;
+        uint32_t code;
         uint8_t bits;
     };
     

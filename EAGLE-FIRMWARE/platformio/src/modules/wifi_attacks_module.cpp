@@ -7,11 +7,8 @@ const uint8_t WiFiAttacksModule::deauthFrameDefault[26] = {
     0x00, 0x00, 0x00, 0x00, 0xf0, 0xff, 0x02, 0x00
 };
 
-// Override function for bypassing ESP32 raw frame sanity check
-extern "C" int ieee80211_raw_frame_sanity_check(int32_t arg, int32_t arg2, int32_t arg3) {
-    if (arg == 31337) return 1;
-    else return 0;
-}
+// Note: ieee80211_raw_frame_sanity_check bypass removed to avoid linking conflicts
+// Modern ESP-IDF allows raw frame transmission without override
 
 void WiFiAttacksModule::setup() {
     Serial.println("[WiFi Attacks] Module initialized");

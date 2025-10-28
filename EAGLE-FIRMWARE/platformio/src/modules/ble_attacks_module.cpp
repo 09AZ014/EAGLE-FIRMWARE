@@ -119,7 +119,7 @@ void BLEAttacksModule::sendAppleBeacon(uint8_t deviceType) {
     }
     
     NimBLEAdvertisementData advData;
-    advData.addData(std::string((char*)packet, 31));
+    advData.addData(packet, 31);
     
     pAdvertising->setAdvertisementData(advData);
     pAdvertising->start();
@@ -153,7 +153,7 @@ void BLEAttacksModule::sendAndroidBeacon(uint32_t deviceID) {
     packet[packetSize++] = deviceID & 0xFF;
     
     NimBLEAdvertisementData advData;
-    advData.addData(std::string((char*)packet, packetSize));
+    advData.addData(packet, packetSize);
     
     pAdvertising->setAdvertisementData(advData);
     pAdvertising->start();
@@ -190,7 +190,7 @@ void BLEAttacksModule::sendSamsungBeacon(uint8_t model) {
     packet[packetSize++] = random(0, 256);
     
     NimBLEAdvertisementData advData;
-    advData.addData(std::string((char*)packet, packetSize));
+    advData.addData(packet, packetSize);
     
     pAdvertising->setAdvertisementData(advData);
     pAdvertising->start();
@@ -217,7 +217,7 @@ void BLEAttacksModule::sendWindowsBeacon() {
     packet[packetSize++] = 0x80;  // Reserved
     
     NimBLEAdvertisementData advData;
-    advData.addData(std::string((char*)packet, packetSize));
+    advData.addData(packet, packetSize);
     
     pAdvertising->setAdvertisementData(advData);
     pAdvertising->start();
@@ -354,16 +354,17 @@ void BLEAttacksModule::scanBLEDevices(uint32_t duration) {
     pScan->setInterval(100);
     pScan->setWindow(99);
     
-    NimBLEScanResults results = pScan->start(duration, false);
+    pScan->start(duration, false);
+    NimBLEScanResults results = pScan->getResults();
     
     Serial.printf("[BLE Attacks] Scan complete. Found %d devices:\n", results.getCount());
     
     for (int i = 0; i < results.getCount(); i++) {
-        NimBLEAdvertisedDevice device = results.getDevice(i);
+        const NimBLEAdvertisedDevice* device = results.getDevice(i);
         Serial.printf("  Device %d: %s (RSSI: %d)\n", 
                       i + 1, 
-                      device.getAddress().toString().c_str(), 
-                      device.getRSSI());
+                      device->getAddress().toString().c_str(), 
+                      device->getRSSI());
     }
     
     NimBLEDevice::deinit(true);

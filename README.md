@@ -54,7 +54,9 @@ Dual setup repository for ESP32 firmware:
 - ⏸️ **QR Codes**: Generate and display QR codes (Coming soon)
 
 ## 🔧 Hardware (defaults)
-- ESP32 DevKit (standard), M5StickC Plus 2, or compatible boards
+- **ESP32 DevKit** (standard) - Fully supported ✅
+- **M5StickC Plus 2** - Supported ✅ (Display/IMU temporarily disabled, serial interface works)
+- Other ESP32 boards - Compatible ✅
 - Optional modules:
   - CC1101 (Sub-GHz RF)
   - PN532 (RFID/NFC)

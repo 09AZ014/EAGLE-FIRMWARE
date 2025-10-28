@@ -7,7 +7,7 @@ class MicModule : public IModule {
 public:
 	const char* getName() const override { return "mic"; }
 	void setup() override {
-		// Placeholder: configure ADC/INMP441 I2S if available
+		Serial.println("[Mic] Module initialized (placeholder)");
 	}
 	void loop() override {
 		// Placeholder: compute simple level and log/bargraph serial

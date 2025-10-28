@@ -134,6 +134,8 @@
  C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/esp_hw_support/include/soc/esp32/spiram.h \
  C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/cores/esp32/io_pin_remap.h \
  C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/cores/esp32/Arduino.h \
+ C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/libraries/LittleFS/src/LittleFS.h \
+ C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/libraries/FS/src/FS.h \
  src/core/board_config.h src/core/../boards/m5stickc_plus2.h \
  src/core/module_manager.h src/modules/wifi_module.h \
  C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFi.h \
@@ -197,8 +199,6 @@
  C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/cores/esp32/Udp.h \
  C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/cores/esp32/cbuf.h \
  src/modules/storage_module.h \
- C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/libraries/LittleFS/src/LittleFS.h \
- C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/libraries/FS/src/FS.h \
  .pio/libdeps/m5stickc_plus2/ArduinoJson/src/ArduinoJson.h \
  .pio/libdeps/m5stickc_plus2/ArduinoJson/src/ArduinoJson.hpp \
  .pio/libdeps/m5stickc_plus2/ArduinoJson/src/ArduinoJson/Configuration.hpp \
@@ -321,4 +321,96 @@
  .pio/libdeps/m5stickc_plus2/M5Unified/src/utility/imu/../I2C_Class.hpp \
  .pio/libdeps/m5stickc_plus2/M5Unified/src/utility/IOExpander_Base.hpp \
  src/modules/imu_module.h src/modules/mic_module.h \
- src/modules/buzzer_module.h src/modules/self_test_module.h
+ src/modules/buzzer_module.h src/modules/self_test_module.h \
+ src/modules/wifi_attacks_module.h \
+ C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/esp_wifi/include/esp_wifi.h \
+ C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/esp_wifi/include/esp_wifi_types.h \
+ C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/esp_wifi/include/esp_private/esp_wifi_private.h \
+ C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/esp_wifi/include/esp_wifi_crypto_types.h \
+ C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/esp_wifi/include/esp_private/wifi_os_adapter.h \
+ C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/esp_wifi/include/esp_wifi_default.h \
+ src/modules/ble_attacks_module.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/NimBLEDevice.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimconfig.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimconfig_rename.h \
+ C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/bt/include/esp32/include/esp_bt.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/host/include/host/ble_gap.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/host/include/host/ble_hs.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/include/nimble/hci_common.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/include/nimble/ble.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/porting/nimble/include/syscfg/syscfg.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/esp_port/port/include/esp_nimble_cfg.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/porting/nimble/include/os/os.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/include/nimble/nimble_npl.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/porting/npl/freertos/include/nimble/nimble_npl_os.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/porting/nimble/include/os/queue.h \
+ C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/freertos/include/freertos/timers.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/porting/npl/freertos/include/nimble/npl_freertos.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/porting/nimble/include/os/endian.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/porting/nimble/include/os/os_error.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/porting/nimble/include/os/os_mbuf.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/porting/nimble/include/os/os_mempool.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/transport/include/nimble/transport.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/transport/include/nimble/transport_impl.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/transport/include/nimble/transport/monitor.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/host/include/host/ble_att.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/host/include/host/ble_eddystone.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/host/include/host/ble_gatt.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/include/nimble/ble.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/host/include/host/ble_uuid.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/host/include/host/ble_esp_gatt.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/host/include/host/ble_hs_adv.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/host/include/host/ble_hs_id.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/host/include/host/ble_hs_hci.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/host/include/host/ble_hs_log.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/porting/nimble/include/modlog/modlog.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/porting/nimble/include/log_common/log_common.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/porting/nimble/include/log_common/ignore.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/porting/nimble/include/log/log.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/porting/nimble/include/logcfg/logcfg.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/host/include/host/ble_hs_mbuf.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/host/include/host/ble_hs_stop.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/host/include/host/ble_ibeacon.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/host/include/host/ble_l2cap.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/include/nimble/nimble_opt.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/include/nimble/nimble_opt_auto.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/host/include/host/ble_sm.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/host/include/host/ble_store.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/host/include/host/ble_esp_hs.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/host/include/host/ble_esp_gap.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/NimBLEClient.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/host/include/host/ble_gap.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/NimBLEAddress.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/include/nimble/ble.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/NimBLERemoteService.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/NimBLEAttribute.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/NimBLEUUID.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/host/include/host/ble_uuid.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/NimBLERemoteCharacteristic.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/NimBLERemoteValueAttribute.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/NimBLEValueAttribute.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/NimBLEAttValue.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/NimBLERemoteDescriptor.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/NimBLEScan.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/NimBLEAdvertisedDevice.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/host/include/host/ble_hs_adv.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/NimBLEUtils.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/NimBLEServer.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/NimBLEService.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/NimBLECharacteristic.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/NimBLELocalValueAttribute.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/nimble/nimble/host/include/host/ble_hs.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/NimBLELocalAttribute.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/NimBLEDescriptor.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/NimBLE2904.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/NimBLEAdvertising.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/NimBLEAdvertisementData.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/NimBLEConnInfo.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/NimBLEBeacon.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/NimBLEUtils.h \
+ .pio/libdeps/m5stickc_plus2/NimBLE-Arduino/src/NimBLEServer.h \
+ src/modules/attacks_api_module.h src/modules/wifi_attacks_module.h \
+ src/modules/ble_attacks_module.h src/modules/ir_module.h \
+ src/modules/evil_portal_module.h \
+ C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/libraries/DNSServer/src/DNSServer.h \
+ C:/Users/AZO/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiUdp.h
